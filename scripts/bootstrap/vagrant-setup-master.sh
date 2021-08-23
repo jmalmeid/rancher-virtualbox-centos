@@ -101,11 +101,30 @@ yum repolist
 
 yum install rke2-server -y
 
+HOSTNAME=$(hostname -s)
+case "$"HOSTNAME in
+rke-master-0)
 cat << EOF | tee /etc/rancher/rke2/config.yaml
-server: https://10.240.0.40:9345
 token: AEuClPrkeCMnQlqKp82c8rLPcG+ay03i
+
 tls-san:
   - 10.240.0.40
+  - 10.240.0.10
+  - 10.240.0.11
+  - 10.240.0.12
+  - 10.240.0.20
+  - 10.240.0.21
+  - 10.240.0.22
+  - rke-lb-0
+  - rke-master-0
+  - rke-master-1
+  - rke-master-2
+  - rke-worker-0
+  - rke-worker-1
+  - rke-worker-2
+
+node-ip: 10.240.0.10
+
 node-taint:
   - "CriticalAddonsOnly=true:NoExecute"
 EOF
@@ -123,8 +142,66 @@ spec:
     flannel:
       iface: "eth1"
 EOF
+  ;;
+rke-master-1)
+cat << EOF | tee /etc/rancher/rke2/config.yaml
+token: AEuClPrkeCMnQlqKp82c8rLPcG+ay03i
+
+tls-san:
+  - 10.240.0.40
+  - 10.240.0.10
+  - 10.240.0.11
+  - 10.240.0.12
+  - 10.240.0.20
+  - 10.240.0.21
+  - 10.240.0.22
+  - rke-lb-0
+  - rke-master-0
+  - rke-master-1
+  - rke-master-2
+  - rke-worker-0
+  - rke-worker-1
+  - rke-worker-2
+
+node-ip: 10.240.0.11
+
+node-taint:
+  - "CriticalAddonsOnly=true:NoExecute"
+
+server: https://rke-master-0:9345
+EOF
+  ;;
+rke-master-2)
+cat << EOF | tee /etc/rancher/rke2/config.yaml
+token: AEuClPrkeCMnQlqKp82c8rLPcG+ay03i
+
+tls-san:
+  - 10.240.0.40
+  - 10.240.0.10
+  - 10.240.0.11
+  - 10.240.0.12
+  - 10.240.0.20
+  - 10.240.0.21
+  - 10.240.0.22
+  - rke-lb-0
+  - rke-master-0
+  - rke-master-1
+  - rke-master-2
+  - rke-worker-0
+  - rke-worker-1
+  - rke-worker-2
+
+node-ip: 10.240.0.12
+
+node-taint:
+  - "CriticalAddonsOnly=true:NoExecute"
+
+server: https://rke-master-0:9345
+EOF
+  ;;
+*)
+  ;;
+esac
 
 systemctl enable rke2-server
 systemctl start rke2-server
-
-sleep 60

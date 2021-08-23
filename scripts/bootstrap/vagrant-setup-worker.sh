@@ -101,7 +101,7 @@ yum repolist
 yum install rke2-agent -y
 
 cat << EOF | tee /etc/rancher/rke2/config.yaml
-server: https://10.240.0.40:9345
+server: https://rke-master-0:9345
 token: AEuClPrkeCMnQlqKp82c8rLPcG+ay03i
 EOF
 
