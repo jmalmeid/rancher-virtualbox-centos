@@ -109,3 +109,22 @@ tls-san:
 node-taint:
   - "CriticalAddonsOnly=true:NoExecute"
 EOF
+
+mkdir -p /var/lib/rancher/rke2/server/manifests/
+
+cat << EOF | tee /var/lib/rancher/rke2/server/manifests/rke2-canal-config.yml
+apiVersion: helm.cattle.io/v1
+kind: HelmChartConfig
+metadata:
+  name: rke2-canal
+  namespace: kube-system
+spec:
+  valuesContent: |-
+    flannel:
+      iface: "eth1"
+EOF
+
+systemctl enable rke2-server
+systemctl start rke2-server
+
+sleep 60

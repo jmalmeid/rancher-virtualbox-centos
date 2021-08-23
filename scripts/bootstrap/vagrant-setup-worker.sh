@@ -104,3 +104,6 @@ cat << EOF | tee /etc/rancher/rke2/config.yaml
 server: https://10.240.0.40:9345
 token: AEuClPrkeCMnQlqKp82c8rLPcG+ay03i
 EOF
+
+systemctl enable rke2-agent
+systemctl start rke2-agent
