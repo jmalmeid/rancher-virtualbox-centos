@@ -102,7 +102,8 @@ yum repolist
 yum install rke2-server -y
 
 HOSTNAME=$(hostname -s)
-case "$"HOSTNAME in
+
+case "$HOSTNAME" in
 rke-master-0)
 cat << EOF | tee /etc/rancher/rke2/config.yaml
 token: AEuClPrkeCMnQlqKp82c8rLPcG+ay03i
@@ -142,6 +143,9 @@ spec:
     flannel:
       iface: "eth1"
 EOF
+
+systemctl enable rke2-server
+systemctl start rke2-server
   ;;
 rke-master-1)
 cat << EOF | tee /etc/rancher/rke2/config.yaml
@@ -203,5 +207,3 @@ EOF
   ;;
 esac
 
-systemctl enable rke2-server
-systemctl start rke2-server
