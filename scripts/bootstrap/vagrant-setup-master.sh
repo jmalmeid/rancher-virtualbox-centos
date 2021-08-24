@@ -172,7 +172,7 @@ node-ip: 10.240.0.11
 node-taint:
   - "CriticalAddonsOnly=true:NoExecute"
 
-server: https://rke-master-0:9345
+server: https://10.240.0.40:9345
 EOF
 
 systemctl enable rke2-server
@@ -203,7 +203,7 @@ node-ip: 10.240.0.12
 node-taint:
   - "CriticalAddonsOnly=true:NoExecute"
 
-server: https://rke-master-0:9345
+server: https://10.240.0.40:9345
 EOF
 
 systemctl enable rke2-server
