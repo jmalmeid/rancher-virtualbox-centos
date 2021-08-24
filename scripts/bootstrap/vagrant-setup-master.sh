@@ -174,6 +174,9 @@ node-taint:
 
 server: https://rke-master-0:9345
 EOF
+
+systemctl enable rke2-server
+systemctl start rke2-server
   ;;
 rke-master-2)
 cat << EOF | tee /etc/rancher/rke2/config.yaml
@@ -202,6 +205,9 @@ node-taint:
 
 server: https://rke-master-0:9345
 EOF
+
+systemctl enable rke2-server
+systemctl start rke2-server
   ;;
 *)
   ;;
