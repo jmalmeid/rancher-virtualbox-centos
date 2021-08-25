@@ -9,6 +9,7 @@ EOF
 
 cat <<EOF | sudo tee -a /etc/hosts
 #Vagrant machines
+10.240.0.40 rke-server
 10.240.0.10 rke-master-0
 10.240.0.11 rke-master-1
 10.240.0.12 rke-master-2
@@ -116,7 +117,7 @@ tls-san:
   - 10.240.0.20
   - 10.240.0.21
   - 10.240.0.22
-  - rke-lb-0
+  - rke-server
   - rke-master-0
   - rke-master-1
   - rke-master-2
@@ -159,7 +160,7 @@ tls-san:
   - 10.240.0.20
   - 10.240.0.21
   - 10.240.0.22
-  - rke-lb-0
+  - rke-server
   - rke-master-0
   - rke-master-1
   - rke-master-2
@@ -172,7 +173,7 @@ node-ip: 10.240.0.11
 node-taint:
   - "CriticalAddonsOnly=true:NoExecute"
 
-server: https://10.240.0.40:9345
+server: https://rke-server:9345
 EOF
 
 systemctl enable rke2-server
@@ -190,7 +191,7 @@ tls-san:
   - 10.240.0.20
   - 10.240.0.21
   - 10.240.0.22
-  - rke-lb-0
+  - rke-server
   - rke-master-0
   - rke-master-1
   - rke-master-2
@@ -203,7 +204,7 @@ node-ip: 10.240.0.12
 node-taint:
   - "CriticalAddonsOnly=true:NoExecute"
 
-server: https://10.240.0.40:9345
+server: https://rke-server:9345
 EOF
 
 systemctl enable rke2-server

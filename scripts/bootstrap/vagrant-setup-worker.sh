@@ -9,6 +9,7 @@ EOF
 
 cat <<EOF | sudo tee -a /etc/hosts
 #Vagrant machines
+10.240.0.40 rke-server
 10.240.0.10 rke-master-0
 10.240.0.11 rke-master-1
 10.240.0.12 rke-master-2
@@ -101,7 +102,7 @@ yum repolist
 yum install rke2-agent -y
 
 cat << EOF | tee /etc/rancher/rke2/config.yaml
-server: https://10.240.0.40:9345
+server: https://rke-server:9345
 token: AEuClPrkeCMnQlqKp82c8rLPcG+ay03i
 EOF
 
