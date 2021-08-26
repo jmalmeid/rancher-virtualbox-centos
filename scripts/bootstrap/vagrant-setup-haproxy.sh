@@ -98,6 +98,8 @@ backend rancher_backend
 	server controller-2 10.240.0.12:9345 check inter 1000
 EOF
 
+mkdir /run/haproxy
+
 systemctl enable haproxy
 systemctl restart haproxy
 systemctl status haproxy -l
