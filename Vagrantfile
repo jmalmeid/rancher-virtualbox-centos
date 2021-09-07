@@ -40,6 +40,9 @@ Vagrant.configure("2") do |config|
 
         c.vm.provision :shell, :path => "scripts/bootstrap/vagrant-setup-master.sh"
         c.vm.provision :shell, :path => "scripts/bootstrap/vagrant-configure-routing.sh"
+        c.vm.provider "virtualbox" do |vb|
+          vb.memory = "2048"
+        end
     end
   end
 
@@ -53,9 +56,9 @@ Vagrant.configure("2") do |config|
 
         c.vm.provision :shell, :path => "scripts/bootstrap/vagrant-setup-worker.sh"
         c.vm.provision :shell, :path => "scripts/bootstrap/vagrant-configure-routing.sh"
-      c.vm.provider "virtualbox" do |vb|
-        vb.memory = "512"
-      end
+        c.vm.provider "virtualbox" do |vb|
+          vb.memory = "512"
+        end
     end
   end
 

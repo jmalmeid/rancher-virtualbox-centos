@@ -133,11 +133,11 @@ EOF
 
 mkdir -p /var/lib/rancher/rke2/server/manifests/
 
-cat << EOF | tee /var/lib/rancher/rke2/server/manifests/rke2-canal-config.yml
+cat << EOF | tee /var/lib/rancher/rke2/server/manifests/rke2-calico-config.yml
 apiVersion: helm.cattle.io/v1
 kind: HelmChartConfig
 metadata:
-  name: rke2-canal
+  name: rke2-calico
   namespace: kube-system
 spec:
   valuesContent: |-
