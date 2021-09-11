@@ -1,0 +1,31 @@
+[all:vars]
+ansible_user=vagrant
+ansible_become=yes
+ansible_become-method=sudo
+
+[lb]
+rke-lb-0 ansible_host=10.240.0.40
+
+[lb:vars]
+iptables_file=iptables-haproxy
+sysctl_files=["99-haproxy.conf"]
+
+[master]
+rke-master-0 ansible_host=10.240.0.10
+rke-master-1 ansible_host=10.240.0.11
+rke-master-2 ansible_host=10.240.0.12
+
+[master:vars]
+iptables_file=iptables-rancher
+sysctl_files=["50-default.conf","99-kubernetes-cri.conf"]
+master=true
+
+[worker]
+rke-worker-0 ansible_host=10.240.0.20
+rke-worker-1 ansible_host=10.240.0.21
+rke-worker-2 ansible_host=10.240.0.22
+
+[worker:vars]
+iptables_file=iptables-rancher
+sysctl_files=["50-default.conf","99-kubernetes-cri.conf"]
+worker=true

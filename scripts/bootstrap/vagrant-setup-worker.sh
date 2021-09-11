@@ -70,14 +70,16 @@ iptables -I INPUT -m state --state NEW -p tcp -m multiport --dports 30000:32767 
 iptables -I INPUT -m state --state NEW -p udp -m multiport --dports 30000:32767 -j ACCEPT
 iptables -I INPUT -m state --state NEW -p tcp -m multiport --dports 2379:2380 -j ACCEPT
 iptables -I INPUT -m state --state NEW -p tcp -m multiport --dports 10250:10255 -j ACCEPT
+iptables -I INPUT -p tcp -m state --state NEW -m tcp --dport 179 -j ACCEPT
 iptables -I INPUT -p udp -m state --state NEW -m udp --dport 53 -j ACCEPT
 iptables -I INPUT -p tcp -m state --state NEW -m tcp --dport 53 -j ACCEPT
 iptables -I INPUT -p tcp -m state --state NEW -m tcp --dport 80 -j ACCEPT
 iptables -I INPUT -p tcp -m state --state NEW -m tcp --dport 22 -j ACCEPT
 iptables -I INPUT -p tcp -m state --state NEW -m tcp --dport 443 -j ACCEPT
+iptables -I INPUT -p tcp -m state --state NEW -m tcp --dport 6443 -j ACCEPT
 iptables -I INPUT -p tcp -m state --state NEW -m tcp --dport 9345 -j ACCEPT
 iptables -I INPUT -p tcp -m state --state NEW -m tcp --dport 8472 -j ACCEPT
-iptables -I INPUT -p tcp -m state --state NEW -m tcp --dport 6443 -j ACCEPT
+iptables -I INPUT -p tcp -m state --state NEW -m tcp --dport 5473 -j ACCEPT
 iptables -I INPUT -p udp -m state --state NEW -m udp --dport 4789 -j ACCEPT
 iptables-save > /etc/sysconfig/iptables
 

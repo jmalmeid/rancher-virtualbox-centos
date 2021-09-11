@@ -1,0 +1,30 @@
+---
+# This role contains common plays that will run on all nodes.
+
+- name: Remove rancher repos
+  command: rm -f /etc/yum.repos.d/rancher-rke2-*
+
+- name: Copy rancher repos
+  copy:
+    src: ../files/{{ item }}
+    dest: /etc/yum.repos.d/{{ item }}
+    owner: root
+    group: root
+    mode: 0640
+  with_items:
+   - rancher-rke2-1-21-latest.repo
+
+- name: Load repos
+  command: sudo yum repolist
+
+- name: Update rke2-server
+  yum: name=rke2-server state=latest
+  when: master is defined and master
+  notify:
+    - restart rke2-server
+
+- name: Update rke2-agent
+  yum: name=rke2-agent state=latest
+  when: worker is defined and worker
+  notify:
+    - restart rke2-agent

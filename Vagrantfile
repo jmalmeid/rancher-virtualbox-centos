@@ -4,6 +4,8 @@
 Vagrant.configure("2") do |config|
   config.vm.box = "centos/7"
   config.vm.box_check_update = false
+  config.ssh.private_key_path = ['~/.vagrant.d/insecure_private_key']
+  config.ssh.insert_key = false
   config.vm.provider "virtualbox" do |vb|
     vb.cpus = 1
     vb.memory = 1024
@@ -23,7 +25,8 @@ Vagrant.configure("2") do |config|
       c.vm.hostname = "rke-lb-0"
       c.vm.network "private_network", ip: "10.240.0.40"
 
-      c.vm.provision :shell, :path => "scripts/bootstrap/vagrant-setup-haproxy.sh"
+      # c.vm.provision :shell, :path => "scripts/bootstrap/vagrant-setup-haproxy.sh"
+      c.vm.provision :shell, :path => "scripts/bootstrap/vagrant-setup-basic.sh"
 
       c.vm.provider "virtualbox" do |vb|
         vb.memory = "512"
@@ -38,8 +41,9 @@ Vagrant.configure("2") do |config|
         c.vm.hostname = "rke-master-#{n}"
         c.vm.network "private_network", ip: "10.240.0.1#{n}"
 
-        c.vm.provision :shell, :path => "scripts/bootstrap/vagrant-setup-master.sh"
-        c.vm.provision :shell, :path => "scripts/bootstrap/vagrant-configure-routing.sh"
+        # c.vm.provision :shell, :path => "scripts/bootstrap/vagrant-setup-master.sh"
+        # c.vm.provision :shell, :path => "scripts/bootstrap/vagrant-configure-routing.sh"
+        c.vm.provision :shell, :path => "scripts/bootstrap/vagrant-setup-basic.sh"
         c.vm.provider "virtualbox" do |vb|
           vb.memory = "2048"
         end
@@ -54,8 +58,9 @@ Vagrant.configure("2") do |config|
         c.vm.hostname = "rke-worker-#{n}"
         c.vm.network "private_network", ip: "10.240.0.2#{n}"
 
-        c.vm.provision :shell, :path => "scripts/bootstrap/vagrant-setup-worker.sh"
-        c.vm.provision :shell, :path => "scripts/bootstrap/vagrant-configure-routing.sh"
+        # c.vm.provision :shell, :path => "scripts/bootstrap/vagrant-setup-worker.sh"
+        # c.vm.provision :shell, :path => "scripts/bootstrap/vagrant-configure-routing.sh"
+        c.vm.provision :shell, :path => "scripts/bootstrap/vagrant-setup-basic.sh"
         c.vm.provider "virtualbox" do |vb|
           vb.memory = "512"
         end

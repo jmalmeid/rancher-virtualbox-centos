@@ -1,0 +1,16 @@
+---
+# This role contains common plays that will run on all nodes.
+
+- name: Install epel
+  yum: name={{ item }} state=present
+  with_items:
+   - epel-release
+
+- name: Install common packages
+  yum: name={{ item }} state=present
+  with_items:
+   - net-tools
+   - bind-utils
+   - telnet
+   - tcpdump
+   - wget

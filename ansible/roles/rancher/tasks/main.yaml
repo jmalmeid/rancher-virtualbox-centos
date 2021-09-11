@@ -1,0 +1,64 @@
+---
+# This role contains common plays that will run on all nodes.
+
+- name: Install NetworkManager
+  yum: name={{ item }} state=present
+  with_items:
+   - NetworkManager
+   - NetworkManager-config-routing-rules
+
+- name: Load NetworkManager
+  command: nmcli c reload
+
+- name: Start service NetworkManager, if not running
+  service:
+    name: NetworkManager
+    enabled: yes
+    state: started
+
+- name: Start service NetworkManager-dispatcher, if not running
+  service:
+    name: NetworkManager-dispatcher
+    enabled: yes
+    state: started
+
+- name: Copy containerd configuration
+  copy:
+    src: ../files/containerd.conf
+    dest: /etc/modules-load.d/containerd.conf
+    owner: root
+    group: root
+    mode: 0640
+
+- name: Copy rancher repos
+  copy:
+    src: ../files/{{ item }}
+    dest: /etc/yum.repos.d/{{ item }}
+    owner: root
+    group: root
+    mode: 0640
+  with_items:
+   - rancher-rke2-1-20-latest.repo
+
+- name: Load repos
+  command: sudo yum repolist
+
+- name: modprobe overlay
+  modprobe:
+    name: overlay
+    state: present
+
+- name: modprobe br_netfilter
+  modprobe:
+    name: br_netfilter
+    state: present
+
+- name: Disable SWAP since kubernetes can't work with swap enabled (1/2)
+  shell: |
+    swapoff -a
+
+- name: Disable SWAP in fstab since kubernetes can't work with swap enabled (2/2)
+  replace:
+    path: /etc/fstab
+    regexp: '^([^#].*?\sswap\s+sw\s+.*)$'
+    replace: '# \1'

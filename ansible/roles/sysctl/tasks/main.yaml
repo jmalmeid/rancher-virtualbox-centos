@@ -1,0 +1,15 @@
+---
+# This role contains common plays that will run on all nodes.
+
+- name: Copy sysctl file {{ item }}
+  copy:
+    src: ../files/{{ item }}
+    dest: /etc/sysctl.d/{{ item }}
+    owner: root
+    group: root
+    mode: 0640
+  with_items: "{{ sysctl_files }}"
+
+- name: Load sysctl
+  command: sudo sysctl --system
+

@@ -1,0 +1,31 @@
+---
+## This playbook deploys the whole application stack in this site.
+
+# Apply common configuration to all hosts
+- hosts: all
+
+  roles:
+  - common
+  - iptables
+  - sysctl
+
+
+- hosts: lb
+
+  roles:
+  - haproxy
+
+- hosts: master, worker
+
+  roles:
+  - rancher
+
+- hosts: master
+
+  roles:
+  - master
+
+- hosts: worker
+
+  roles:
+  - worker

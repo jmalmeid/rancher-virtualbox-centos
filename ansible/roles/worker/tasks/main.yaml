@@ -1,0 +1,34 @@
+---
+# This role contains common plays that will run on all nodes.
+
+- name: Remove rke2-agent
+  yum: name={{ item }} state=absent
+  with_items:
+   - rke2-agent
+
+- name: Remove directorys
+  command: rm -rf /etc/rancher /var/lib/rancher
+
+- name: Install rke2-agent
+  yum: name={{ item }} state=present
+  with_items:
+   - rke2-agent
+
+- name: Creates directory /etc/rancher/rke2
+  file: path={{ item }} state=directory owner=root group=root
+  with_items:
+    - /etc/rancher/rke2
+
+- name: Generate config rancher
+  template:
+    src: ../templates/config.yaml.j2
+    dest: /etc/rancher/rke2/config.yaml
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Start service rke2-agent, if not running
+  service:
+    name: rke2-agent
+    enabled: yes
+    state: restarted

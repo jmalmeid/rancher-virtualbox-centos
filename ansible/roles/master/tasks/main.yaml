@@ -1,0 +1,55 @@
+---
+# This role contains common plays that will run on all nodes.
+
+- name: Remove rke2-server
+  yum: name={{ item }} state=absent
+  with_items:
+   - rke2-server
+
+- name: Remove directorys
+  command: rm -rf /etc/rancher /var/lib/rancher
+
+- name: Install rke2-server
+  yum: name={{ item }} state=present
+  with_items:
+   - rke2-server
+
+- name: Creates directory /etc/rancher/rke2
+  file: path={{ item }} state=directory owner=root group=root
+  with_items:
+    - /etc/rancher/rke2
+    - /var/lib/rancher/rke2/server/manifests
+
+- name: Creates directory /etc/rancher/rke2
+  file: path={{ item }} state=directory owner=root group=root
+  with_items:
+    - /etc/rancher/rke2
+
+- name: Creates directory /var/lib/rancher/rke2/server/manifests
+  file: path={{ item }} state=directory owner=root group=root
+  with_items:
+    - /var/lib/rancher/rke2/server/manifests
+  when: ansible_hostname == "rke-master-0"
+ 
+- name: Copy calico configuration
+  copy:
+    src: ../files/rke2-calico-config.yml
+    dest: /var/lib/rancher/rke2/server/manifests/rke2-calico-config.yml
+    owner: root
+    group: root
+    mode: 0640
+  when: ansible_hostname == "rke-master-0"
+
+- name: Generate config rancher
+  template:
+    src: ../templates/config.yaml.j2
+    dest: /etc/rancher/rke2/config.yaml
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Start service rke2-server, if not running
+  service:
+    name: rke2-server
+    enabled: yes
+    state: restarted

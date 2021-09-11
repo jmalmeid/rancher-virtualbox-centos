@@ -1,0 +1,29 @@
+---
+# This role contains common plays that will run on all nodes.
+
+- name: Install iptables
+  yum: name={{ item }} state=present
+  with_items:
+   - iptables
+
+- name: Remove firewalld
+  yum: name={{ item }} state=absent
+  with_items:
+   - firewalld
+
+- name: Start service iptables, if not running
+  service:
+    name: iptables
+    enabled: yes
+    state: started
+
+- name: Copy iptables configuration
+  copy:
+    src: ../files/{{ iptables_file }}
+    dest: /etc/sysconfig/iptables
+    owner: root
+    group: root
+    mode: 0640
+  notify:
+    - restart iptables
+
